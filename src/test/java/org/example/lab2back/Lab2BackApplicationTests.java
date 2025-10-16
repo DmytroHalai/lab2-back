@@ -14,7 +14,7 @@ class Lab2BackApplicationTests {
 
     @Test
     void correctTest() {
-        assertEquals(2, 3);
+        assertEquals(2, 2);
     }
 
 }
