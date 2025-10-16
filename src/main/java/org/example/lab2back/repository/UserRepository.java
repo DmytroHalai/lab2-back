@@ -28,8 +28,8 @@ public class UserRepository {
         users.add((UserEntity) entity);
     }
 
-    public UserEntity findById(Object o) {
-        return users.stream().filter(user -> user.getId().equals(o)).findFirst().orElse(null);
+    public UserEntity findById(UUID id) {
+        return users.stream().filter(user -> user.getId().equals(id)).findFirst().orElse(null);
     }
 
     public void deleteById(Object o) {
