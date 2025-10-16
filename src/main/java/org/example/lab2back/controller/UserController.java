@@ -2,9 +2,11 @@ package org.example.lab2back.controller;
 
 import org.example.lab2back.entity.UserEntity;
 import org.example.lab2back.service.UserService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
 import java.util.UUID;
 
@@ -28,9 +30,12 @@ public class UserController {
     }
 
     @PostMapping("/user")
+    @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<UserEntity> createUser(@RequestBody UserEntity user) {
-        userService.createUser(user);
-        return ResponseEntity.ok(user);
+        UserEntity newUser = userService.createUser(user);
+        return ResponseEntity
+                .created(URI.create("/users" + newUser.getId()))
+                .body(newUser);
     }
 
     @DeleteMapping("/user/{id}")

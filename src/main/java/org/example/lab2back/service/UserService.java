@@ -1,5 +1,6 @@
 package org.example.lab2back.service;
 
+import org.apache.catalina.User;
 import org.example.lab2back.entity.UserEntity;
 import org.example.lab2back.repository.UserRepository;
 import org.springframework.stereotype.Service;
@@ -23,8 +24,10 @@ public class UserService{
         return userRepository.findById(id);
     }
 
-    public void createUser(UserEntity user) {
-        userRepository.save(user);
+    public UserEntity createUser(UserEntity user) {
+        UserEntity newUser = new UserEntity(UUID.randomUUID(), user.getUsername());
+        userRepository.save(newUser);
+        return newUser;
     }
 
     public void deleteUser(UUID id) {
