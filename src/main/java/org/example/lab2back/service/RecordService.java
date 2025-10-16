@@ -1,7 +1,10 @@
 package org.example.lab2back.service;
 
+import org.example.lab2back.entity.CategoryEntity;
 import org.example.lab2back.entity.RecordEntity;
+import org.example.lab2back.repository.CategoryRepository;
 import org.example.lab2back.repository.RecordRepository;
+import org.example.lab2back.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,40 +13,39 @@ import java.util.UUID;
 @Service
 public class RecordService {
     RecordRepository repository;
+    UserRepository userRepository;
+    CategoryRepository categoryRepository;
 
-    public RecordService(RecordRepository repository) {
+    public RecordService(RecordRepository repository, UserRepository userRepository, CategoryRepository categoryRepository) {
         this.repository = repository;
+        this.userRepository = userRepository;
+        this.categoryRepository = categoryRepository;
     }
 
-
     public List<RecordEntity> getRecordsByUserIdAndCategoryId(UUID userId, UUID categoryId) {
-        if (userId != null && categoryId != null) {
-            return repository.getRecordsByUserIdAndCategoryId(userId, categoryId);
-        } else if (userId != null) {
-            return repository.getRecordsByUserId(userId);
-        } else if (categoryId != null) {
-            return repository.getRecordsByCategoryId(categoryId);
-        } else {
-            return repository.getAllRecords();
-        }
+        if (userId != null && categoryId != null) return repository.getRecordsByUserIdAndCategoryId(userId, categoryId);
+        else if (userId != null) return repository.getRecordsByUserId(userId);
+        else if (categoryId != null) return repository.getRecordsByCategoryId(categoryId);
+        else throw new IllegalArgumentException("At least one parameter must be provided");
     }
 
     public RecordEntity getRecordById(UUID id) {
-        return repository.getAllRecords().stream()
-                .filter(oneRecord -> oneRecord.getId().equals(id))
-                .findFirst()
-                .orElse(null);
+        return repository.getAllRecords().stream().filter(oneRecord -> oneRecord.getId().equals(id)).findFirst().orElse(null);
     }
 
     public void deleteRecordById(UUID id) {
-        repository.getAllRecords().stream()
-                .filter(oneRecord -> oneRecord.getId().equals(id))
-                .findFirst()
-                .ifPresent(repository::deleteRecord);
+        repository.getAllRecords().stream().filter(oneRecord -> oneRecord.getId().equals(id)).findFirst().ifPresent(repository::deleteRecord);
     }
 
     public RecordEntity createRecord(RecordEntity oneRecord) {
-        repository.addRecord(oneRecord);
-        return oneRecord;
+        if (checkIsValid(oneRecord)) throw new IllegalArgumentException("Input ids are not valid");
+        RecordEntity newRecord = new RecordEntity(UUID.randomUUID(), oneRecord.getCategoryId(), oneRecord.getUserId(), oneRecord.getAmount());
+        repository.addRecord(newRecord);
+        return newRecord;
+    }
+
+    private boolean checkIsValid(RecordEntity oneRecord) {
+        return userRepository.findById(oneRecord.getUserId()).isEmpty() ||
+                categoryRepository.findById(oneRecord.getCategoryId()).isEmpty();
     }
 }
