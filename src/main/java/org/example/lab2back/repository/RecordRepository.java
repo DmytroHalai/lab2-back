@@ -13,16 +13,17 @@ import static org.example.lab2back.bd.Initializer.setTestRecords;
 public class RecordRepository {
     private final List<RecordEntity> records;
 
-    @PostConstruct
-    public void init() {
-        setTestRecords();
-    }
-
     public RecordRepository(List<RecordEntity> records) {
         this.records = records;
     }
 
+    @PostConstruct
+    public void init() {
+        records.addAll(setTestRecords());
+    }
+
     public List<RecordEntity> getAllRecords() {
+        System.out.println(records);
         return records;
     }
 

@@ -1,5 +1,6 @@
 package org.example.lab2back.controller;
 
+import jakarta.validation.Valid;
 import org.example.lab2back.entity.UserEntity;
 import org.example.lab2back.service.UserService;
 import org.springframework.http.HttpStatus;
@@ -29,18 +30,18 @@ public class UserController {
         return ResponseEntity.ok(userService.getUserByID(id));
     }
 
-    @PostMapping("/user")
-    @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<UserEntity> createUser(@RequestBody UserEntity user) {
-        UserEntity newUser = userService.createUser(user);
-        return ResponseEntity
-                .created(URI.create("/users" + newUser.getId()))
-                .body(newUser);
-    }
-
     @DeleteMapping("/user/{id}")
     public ResponseEntity<String> deleteUser(@PathVariable UUID id) {
         userService.deleteUser(id);
         return ResponseEntity.ok("User deleted successfully");
+    }
+
+    @PostMapping("/user")
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<UserEntity> createUser(@Valid @RequestBody UserEntity user) {
+        UserEntity newUser = userService.createUser(user);
+        return ResponseEntity
+                .created(URI.create("/users" + newUser.getId()))
+                .body(newUser);
     }
 }

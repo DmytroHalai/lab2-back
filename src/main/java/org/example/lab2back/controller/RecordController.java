@@ -1,5 +1,6 @@
 package org.example.lab2back.controller;
 
+import jakarta.validation.Valid;
 import org.example.lab2back.entity.RecordEntity;
 import org.example.lab2back.service.RecordService;
 import org.springframework.http.HttpStatus;
@@ -43,7 +44,7 @@ public class RecordController {
     }
 
     @PostMapping("")
-    public ResponseEntity<RecordEntity> createRecord(@RequestBody RecordEntity oneRecord) {
+    public ResponseEntity<RecordEntity> createRecord(@Valid @RequestBody RecordEntity oneRecord) {
         return ResponseEntity.ok(service.createRecord(oneRecord));
     }
 }

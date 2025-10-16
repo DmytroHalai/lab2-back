@@ -2,39 +2,40 @@ package org.example.lab2back.repository;
 
 import jakarta.annotation.PostConstruct;
 import org.example.lab2back.entity.CategoryEntity;
-import org.example.lab2back.utils.AbstractEntity;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.example.lab2back.bd.Initializer.setTestCategories;
 
 @Repository
 public class CategoryRepository {
-    public void save(AbstractEntity entity) {
-        categoryEntityList.add((CategoryEntity) entity);
+    public List<CategoryEntity> categories;
+
+    public CategoryRepository(List<CategoryEntity> categories) {
+        this.categories = categories;
+    }
+
+    public void save(CategoryEntity entity) {
+        categories.add(entity);
     }
 
     @PostConstruct
     public void init() {
-        categoryEntityList.addAll(setTestCategories());
-    }
-
-    public List<CategoryEntity> categoryEntityList;
-
-    public CategoryRepository(List<CategoryEntity> categoryEntityList) {
-        this.categoryEntityList = categoryEntityList;
+        categories.addAll(setTestCategories());
     }
 
     public List<CategoryEntity> findAll() {
-        return categoryEntityList;
+        return categories;
     }
 
-    public CategoryEntity findById(Object id) {
-        return categoryEntityList.stream().filter(category -> category.getId().equals(id)).findFirst().orElse(null);
+    public Optional<CategoryEntity> findById(Object id) {
+        return categories.stream().filter(category -> category.getId().equals(id)).findFirst();
     }
 
-    public void deleteById(Object id) {
-        categoryEntityList.removeIf(category -> category.getId().equals(id));
+    public Optional<Void> deleteById(Object id) {
+        categories.removeIf(category -> category.getId().equals(id));
+        return Optional.empty();
     }
 }
