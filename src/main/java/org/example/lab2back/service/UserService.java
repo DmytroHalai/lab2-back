@@ -1,11 +1,12 @@
 package org.example.lab2back.service;
 
-import org.apache.catalina.User;
+import jakarta.persistence.EntityNotFoundException;
 import org.example.lab2back.entity.UserEntity;
 import org.example.lab2back.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -21,7 +22,9 @@ public class UserService{
     }
 
     public UserEntity getUserByID(UUID id) {
-        return userRepository.findById(id);
+        return userRepository
+                .findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("User by id: " + id +" not found"));
     }
 
     public UserEntity createUser(UserEntity user) {
@@ -31,6 +34,8 @@ public class UserService{
     }
 
     public void deleteUser(UUID id) {
-        userRepository.deleteById(id);
+        userRepository
+                .deleteById(id)
+                .orElseThrow(() -> new EntityNotFoundException("User by id: " + id +" not found"));
     }
 }

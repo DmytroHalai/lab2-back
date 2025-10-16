@@ -30,6 +30,12 @@ public class UserController {
         return ResponseEntity.ok(userService.getUserByID(id));
     }
 
+    @DeleteMapping("/user/{id}")
+    public ResponseEntity<String> deleteUser(@PathVariable UUID id) {
+        userService.deleteUser(id);
+        return ResponseEntity.ok("User deleted successfully");
+    }
+
     @PostMapping("/user")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<UserEntity> createUser(@Valid @RequestBody UserEntity user) {
@@ -37,11 +43,5 @@ public class UserController {
         return ResponseEntity
                 .created(URI.create("/users" + newUser.getId()))
                 .body(newUser);
-    }
-
-    @DeleteMapping("/user/{id}")
-    public ResponseEntity<String> deleteUser(@PathVariable UUID id) {
-        userService.deleteUser(id);
-        return ResponseEntity.ok("User deleted successfully");
     }
 }
