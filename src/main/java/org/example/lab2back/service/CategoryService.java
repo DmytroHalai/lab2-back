@@ -29,9 +29,7 @@ public class CategoryService {
 
 
     public void deleteCategory(UUID id) {
-        categoryRepository
-                .deleteById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Category by id: " + id + " not found"));
+        categoryRepository.deleteById(id);
     }
 
     public CategoryEntity getById(UUID id) {

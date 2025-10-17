@@ -34,10 +34,10 @@ public class RecordController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteRecordById(@PathVariable UUID id) {
+    public ResponseEntity<String> deleteRecordById(@PathVariable UUID id) {
         try {
             service.deleteRecordById(id);
-            return ResponseEntity.noContent().build();
+            return ResponseEntity.ok("Record deleted successfully");
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }

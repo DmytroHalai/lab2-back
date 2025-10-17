@@ -1,10 +1,12 @@
 package org.example.lab2back.repository;
 
 import jakarta.annotation.PostConstruct;
+import jakarta.persistence.EntityNotFoundException;
 import org.example.lab2back.entity.RecordEntity;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.example.lab2back.bd.Initializer.setTestRecords;
@@ -31,10 +33,6 @@ public class RecordRepository {
         records.add(oneRecord);
     }
 
-    public void deleteRecord(RecordEntity oneRecord) {
-        records.remove(oneRecord);
-    }
-
     public List<RecordEntity> getRecordsByUserId(UUID userId) {
         return records.stream()
                 .filter(oneRecord -> oneRecord.getUserId().equals(userId))
@@ -51,5 +49,16 @@ public class RecordRepository {
         return records.stream()
                 .filter(oneRecord -> oneRecord.getUserId().equals(userId) && oneRecord.getCategoryId().equals(categoryId))
                 .toList();
+    }
+
+    public void deleteRecordById(UUID id) {
+        if (!records.removeIf(oneRecord -> oneRecord.getId().equals(id)))
+            throw new EntityNotFoundException("Record by id: " + id + " not found");
+    }
+
+    public Optional<RecordEntity> getRecordById(UUID id) {
+        return records.stream()
+                .filter(oneRecord -> oneRecord.getId().equals(id))
+                .findFirst();
     }
 }
