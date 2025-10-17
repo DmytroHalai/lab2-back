@@ -1,6 +1,7 @@
 package org.example.lab2back.repository;
 
 import jakarta.annotation.PostConstruct;
+import jakarta.persistence.EntityNotFoundException;
 import org.example.lab2back.entity.CategoryEntity;
 import org.springframework.stereotype.Repository;
 
@@ -34,8 +35,8 @@ public class CategoryRepository {
         return categories.stream().filter(category -> category.getId().equals(id)).findFirst();
     }
 
-    public Optional<Void> deleteById(Object id) {
-        categories.removeIf(category -> category.getId().equals(id));
-        return Optional.empty();
+    public void deleteById(Object id) {
+        if (!categories.removeIf(category -> category.getId().equals(id)))
+            throw new EntityNotFoundException("Category by id: " + id + " not found");
     }
 }

@@ -1,11 +1,10 @@
 package org.example.lab2back.repository;
 
 import jakarta.annotation.PostConstruct;
+import jakarta.persistence.EntityNotFoundException;
 import org.example.lab2back.entity.UserEntity;
-import org.example.lab2back.utils.AbstractEntity;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -35,9 +34,9 @@ public class UserRepository {
                 .findFirst();
     }
 
-    public Optional<Void> deleteById(Object o) {
-        users.removeIf(user -> user.getId().equals(o));
-        return Optional.empty();
+    public void deleteById(Object o) {
+        if (!users.removeIf(user -> user.getId().equals(o)))
+            throw new EntityNotFoundException("User by id: " + o + " not found");
     }
 
     public List<UserEntity> findAll() {

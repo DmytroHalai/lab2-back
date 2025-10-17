@@ -8,6 +8,7 @@ import org.example.lab2back.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -30,11 +31,13 @@ public class RecordService {
     }
 
     public RecordEntity getRecordById(UUID id) {
-        return repository.getAllRecords().stream().filter(oneRecord -> oneRecord.getId().equals(id)).findFirst().orElse(null);
+        return repository
+                .getRecordById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Record by id: " + id + " not found"));
     }
 
     public void deleteRecordById(UUID id) {
-        repository.getAllRecords().stream().filter(oneRecord -> oneRecord.getId().equals(id)).findFirst().ifPresent(repository::deleteRecord);
+        repository.deleteRecordById(id);
     }
 
     public RecordEntity createRecord(RecordEntity oneRecord) {
