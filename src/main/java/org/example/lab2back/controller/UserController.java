@@ -1,6 +1,7 @@
 package org.example.lab2back.controller;
 
 import jakarta.validation.Valid;
+import org.example.lab2back.docs.UserControllerDocs;
 import org.example.lab2back.entity.UserEntity;
 import org.example.lab2back.service.UserService;
 import org.springframework.http.HttpStatus;
@@ -13,29 +14,33 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/")
-public class UserController {
+public class UserController implements UserControllerDocs {
     private final UserService userService;
 
     public UserController(UserService userService) {
         this.userService = userService;
     }
 
+    @Override
     @GetMapping("/users")
     public ResponseEntity<List<UserEntity>> getAllUsers() {
         return ResponseEntity.ok(userService.getAllUsers());
     }
 
+    @Override
     @GetMapping("/user/{id}")
     public ResponseEntity<UserEntity> getUserById(@PathVariable UUID id) {
         return ResponseEntity.ok(userService.getUserByID(id));
     }
 
+    @Override
     @DeleteMapping("/user/{id}")
     public ResponseEntity<String> deleteUser(@PathVariable UUID id) {
         userService.deleteUser(id);
         return ResponseEntity.ok("User deleted successfully");
     }
 
+    @Override
     @PostMapping("/user")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<UserEntity> createUser(@Valid @RequestBody UserEntity user) {
