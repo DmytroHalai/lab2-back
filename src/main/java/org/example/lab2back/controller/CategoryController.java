@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/category")
@@ -27,12 +26,12 @@ public class CategoryController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CategoryEntity> getCategoryById(@Valid @PathVariable UUID id) {
+    public ResponseEntity<CategoryEntity> getCategoryById(@Valid @PathVariable Long id) {
         return ResponseEntity.ok(categoryService.getById(id));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteCategory(@PathVariable UUID id) {
+    public ResponseEntity<String> deleteCategory(@PathVariable Long id) {
         categoryService.deleteCategory(id);
         return ResponseEntity.ok("Category deleted successfully");
     }
