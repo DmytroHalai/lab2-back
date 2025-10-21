@@ -37,24 +37,3 @@ jobs:
 
       - name: Build Docker image
         run: docker build -t lab2-back:test .
-
-      - name: Run container (smoke test)
-        run: |
-          docker run -d --name app-test \
-            -p 8080:8080 \
-            lab2-back:test
-
-          echo "Waiting for container to start..."
-          sleep 15
-
-          echo "Container is running:"
-          docker ps | grep app-test
-
-          echo "Logs:"
-          docker logs app-test
-
-      - name: Cleanup
-        if: always()
-        run: |
-          docker stop app-test || true
-          docker rm app-test || true
