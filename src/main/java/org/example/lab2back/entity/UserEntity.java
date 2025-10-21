@@ -1,21 +1,41 @@
 package org.example.lab2back.entity;
 
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import org.example.lab2back.utils.AbstractEntity;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import java.util.UUID;
+@Entity
+@AllArgsConstructor
+@NoArgsConstructor
+public class UserEntity {
 
-public class UserEntity extends AbstractEntity {
-    @NotBlank(message = "Username cannot be null")
-    private final String username;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    public UserEntity(UUID id, String username) {
-        super.setId(id);
+    @Column(nullable = false)
+    private String username;
+
+    public UserEntity(String username) {
         this.username = username;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getUsername() {
         return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 }
