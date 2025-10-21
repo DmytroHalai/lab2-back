@@ -10,7 +10,6 @@ import org.example.lab2back.entity.CategoryEntity;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
-import java.util.UUID;
 
 @Tag(
         name = "Category API",
@@ -44,7 +43,7 @@ public interface CategoryControllerDocs {
     @Operation(
             summary = "Get category by ID",
             description = """
-                    Fetches a specific category based on its unique identifier (UUID).
+                    Fetches a specific category based on its unique identifier (Long).
                     Returns 404 if no category with such ID exists.
                     """,
             responses = {
@@ -58,8 +57,8 @@ public interface CategoryControllerDocs {
             }
     )
     ResponseEntity<CategoryEntity> getCategoryById(
-            @Parameter(description = "Unique identifier of the category (UUID)", required = true)
-            UUID id
+            @Parameter(description = "Unique identifier of the category (Long)", required = true)
+            Long id
     );
 
     @Operation(
@@ -86,7 +85,7 @@ public interface CategoryControllerDocs {
     @Operation(
             summary = "Delete category",
             description = """
-                    Deletes an existing category using its UUID.
+                    Deletes an existing category using its Long.
                     Returns a success message when deletion is complete.
                     """,
             responses = {
@@ -99,7 +98,7 @@ public interface CategoryControllerDocs {
             }
     )
     ResponseEntity<String> deleteCategory(
-            @Parameter(description = "Unique identifier of the category (UUID)", required = true)
-            UUID id
+            @Parameter(description = "Unique identifier of the category (Long)", required = true)
+            Long id
     );
 }

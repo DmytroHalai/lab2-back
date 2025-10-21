@@ -10,7 +10,6 @@ import org.example.lab2back.entity.RecordEntity;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
-import java.util.UUID;
 
 @Tag(
         name = "Record API",
@@ -40,14 +39,14 @@ public interface RecordControllerDocs {
             }
     )
     ResponseEntity<List<RecordEntity>> getRecordsByUserIdAndCategoryId(
-            @Parameter(description = "Optional: filter records by user UUID") UUID userId,
-            @Parameter(description = "Optional: filter records by category UUID") UUID categoryId
+            @Parameter(description = "Optional: filter records by user Long") Long userId,
+            @Parameter(description = "Optional: filter records by category Long") Long categoryId
     );
 
     @Operation(
             summary = "Get record by ID",
             description = """
-                    Fetches a record from the database using its unique UUID.
+                    Fetches a record from the database using its unique Long.
                     Returns the full record details if found.
                     """,
             responses = {
@@ -61,14 +60,14 @@ public interface RecordControllerDocs {
             }
     )
     ResponseEntity<RecordEntity> getRecordById(
-            @Parameter(description = "Unique identifier of the record (UUID)", required = true)
-            UUID id
+            @Parameter(description = "Unique identifier of the record (Long)", required = true)
+            Long id
     );
 
     @Operation(
             summary = "Delete record",
             description = """
-                    Deletes a record identified by its UUID.
+                    Deletes a record identified by its Long.
                     Returns HTTP 204 (No Content) when successful,
                     or HTTP 404 if no record with such ID exists.
                     """,
@@ -78,8 +77,8 @@ public interface RecordControllerDocs {
             }
     )
     ResponseEntity<String> deleteRecordById(
-            @Parameter(description = "Unique identifier of the record (UUID)", required = true)
-            UUID id
+            @Parameter(description = "Unique identifier of the record (Long)", required = true)
+            Long id
     );
 
     @Operation(

@@ -10,7 +10,6 @@ import org.example.lab2back.entity.UserEntity;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
-import java.util.UUID;
 
 @Tag(
         name = "User API",
@@ -44,7 +43,7 @@ public interface UserControllerDocs {
     @Operation(
             summary = "Get user by ID",
             description = """
-                    Fetches a single user record based on its unique UUID.
+                    Fetches a single user record based on its unique Long.
                     Returns full user details if found; otherwise, a 404 error.
                     """,
             responses = {
@@ -58,8 +57,8 @@ public interface UserControllerDocs {
             }
     )
     ResponseEntity<UserEntity> getUserById(
-            @Parameter(description = "Unique identifier of the user (UUID)", required = true)
-            UUID id
+            @Parameter(description = "Unique identifier of the user (Long)", required = true)
+            Long id
     );
 
     @Operation(
@@ -87,7 +86,7 @@ public interface UserControllerDocs {
     @Operation(
             summary = "Delete user",
             description = """
-                    Deletes a user identified by their UUID.
+                    Deletes a user identified by their Long.
                     Returns a confirmation message upon successful deletion.
                     """,
             responses = {
@@ -100,7 +99,7 @@ public interface UserControllerDocs {
             }
     )
     ResponseEntity<String> deleteUser(
-            @Parameter(description = "Unique identifier of the user (UUID)", required = true)
-            UUID id
+            @Parameter(description = "Unique identifier of the user (Long)", required = true)
+            Long id
     );
 }
