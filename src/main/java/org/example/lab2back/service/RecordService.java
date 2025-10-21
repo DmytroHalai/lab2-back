@@ -1,6 +1,5 @@
 package org.example.lab2back.service;
 
-import org.example.lab2back.entity.CategoryEntity;
 import org.example.lab2back.entity.RecordEntity;
 import org.example.lab2back.repository.CategoryRepository;
 import org.example.lab2back.repository.RecordRepository;
@@ -8,8 +7,6 @@ import org.example.lab2back.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
 @Service
 public class RecordService {
@@ -23,27 +20,27 @@ public class RecordService {
         this.categoryRepository = categoryRepository;
     }
 
-    public List<RecordEntity> getRecordsByUserIdAndCategoryId(UUID userId, UUID categoryId) {
+    public List<RecordEntity> getRecordsByUserIdAndCategoryId(Long userId, Long categoryId) {
         if (userId != null && categoryId != null) return repository.getRecordsByUserIdAndCategoryId(userId, categoryId);
         else if (userId != null) return repository.getRecordsByUserId(userId);
         else if (categoryId != null) return repository.getRecordsByCategoryId(categoryId);
         else throw new IllegalArgumentException("At least one parameter must be provided");
     }
 
-    public RecordEntity getRecordById(UUID id) {
+    public RecordEntity getRecordById(Long id) {
         return repository
                 .getRecordById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Record by id: " + id + " not found"));
     }
 
-    public void deleteRecordById(UUID id) {
+    public void deleteRecordById(Long id) {
         repository.deleteRecordById(id);
     }
 
     public RecordEntity createRecord(RecordEntity oneRecord) {
         if (checkIsValid(oneRecord)) throw new IllegalArgumentException("Input ids are not valid");
-        RecordEntity newRecord = new RecordEntity(UUID.randomUUID(), oneRecord.getCategoryId(), oneRecord.getUserId(), oneRecord.getAmount());
-        repository.addRecord(newRecord);
+        RecordEntity newRecord = new RecordEntity(oneRecord.getCategoryId(), oneRecord.getUserId(), oneRecord.getAmount());
+        repository.save(newRecord);
         return newRecord;
     }
 

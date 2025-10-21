@@ -1,34 +1,60 @@
 package org.example.lab2back.entity;
 
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import org.example.lab2back.utils.AbstractEntity;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
-import java.util.UUID;
+@Entity
+@NoArgsConstructor
+@AllArgsConstructor
+public class RecordEntity {
 
-public class RecordEntity extends AbstractEntity {
-    @NotNull(message = "Category ID is mandatory")
-    private final UUID categoryId;
-    @NotNull(message = "User ID is mandatory")
-    private final UUID userId;
-    @NotNull(message = "Amount is mandatory")
-    private final double amount;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @Column(nullable = false)
+    private Long categoryId;
+    @Column(nullable = false)
+    private Long userId;
+    @Column(nullable = false)
+    private double amount;
 
-    public RecordEntity(UUID id, UUID categoryId, UUID userId, double amount) {
-        super.setId(id);
+    public RecordEntity(Long categoryId, Long userId, double amount) {
         this.categoryId = categoryId;
         this.userId = userId;
         this.amount = amount;
     }
 
-    public UUID getCategoryId() {
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getCategoryId() {
         return categoryId;
     }
 
-    public UUID getUserId() {
+    public void setCategoryId(Long categoryId) {
+        this.categoryId = categoryId;
+    }
+
+    public Long getUserId() {
         return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public double getAmount() {
         return amount;
+    }
+
+    public void setAmount(double amount) {
+        this.amount = amount;
     }
 }

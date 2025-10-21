@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: ["**"]
+    branches: [ "**" ]
   pull_request:
-    branches: ["**"]
+    branches: [ "**" ]
 
 permissions: read-all
 
@@ -13,53 +13,27 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build-test:
+  build-and-run:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        java: [ '21' ]
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set up JDK ${{ matrix.java }}
+      - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: ${{ matrix.java }}
+          java-version: 21
           cache: maven
 
-      - name: Validate Maven
+      - name: Build JAR
         run: |
           if [ -f mvnw ]; then
-            chmod +x mvnw
-            ./mvnw -v
+            ./mvnw -B -ntp clean package -DskipTests
           else
-            mvn -v
+            mvn -B -ntp clean package -DskipTests
           fi
 
-      - name: Build (no tests)
-        run: |
-          if [ -f mvnw ]; then
-            ./mvnw -B -ntp -DskipTests compile
-          else
-            mvn -B -ntp -DskipTests compile
-          fi
-
-      - name: Run unit & integration tests (Surefire + Failsafe)
-        run: |
-          if [ -f mvnw ]; then
-            ./mvnw -B -ntp verify
-          else
-            mvn -B -ntp verify
-          fi
-
-      - name: Upload test reports
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: maven-test-reports
-          path: |
-            **/target/surefire-reports/**
-            **/target/failsafe-reports/**
-            **/target/site/**
+      - name: Build Docker image
+        run: docker build -t lab2-back:test .

@@ -1,19 +1,35 @@
 package org.example.lab2back.entity;
 
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import org.example.lab2back.utils.AbstractEntity;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
-import java.util.UUID;
+@Entity
+@NoArgsConstructor
+@AllArgsConstructor
+public class CategoryEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
+    @Column(nullable = false, unique = true)
+    private String name;
 
-public class CategoryEntity extends AbstractEntity {
-    @NotBlank(message = "Category name cannot be null")
-    private final String name;
-
-    public CategoryEntity(UUID id, String name) {
-        super.setId(id);
+    public CategoryEntity(String name) {
         this.name = name;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public String getName() {

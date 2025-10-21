@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/")
@@ -29,13 +28,13 @@ public class UserController implements UserControllerDocs {
 
     @Override
     @GetMapping("/user/{id}")
-    public ResponseEntity<UserEntity> getUserById(@PathVariable UUID id) {
+    public ResponseEntity<UserEntity> getUserById(@PathVariable Long id) {
         return ResponseEntity.ok(userService.getUserByID(id));
     }
 
     @Override
     @DeleteMapping("/user/{id}")
-    public ResponseEntity<String> deleteUser(@PathVariable UUID id) {
+    public ResponseEntity<String> deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);
         return ResponseEntity.ok("User deleted successfully");
     }

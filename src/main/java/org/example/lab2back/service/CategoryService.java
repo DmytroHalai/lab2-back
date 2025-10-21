@@ -6,7 +6,6 @@ import org.example.lab2back.repository.CategoryRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.UUID;
 
 @Service
 public class CategoryService {
@@ -22,17 +21,17 @@ public class CategoryService {
     }
 
     public CategoryEntity createCategory(CategoryEntity category) {
-        CategoryEntity newCategory = new CategoryEntity(UUID.randomUUID(), category.getName());
+        CategoryEntity newCategory = new CategoryEntity(category.getName());
         categoryRepository.save(newCategory);
         return newCategory;
     }
 
 
-    public void deleteCategory(UUID id) {
+    public void deleteCategory(Long id) {
         categoryRepository.deleteById(id);
     }
 
-    public CategoryEntity getById(UUID id) {
+    public CategoryEntity getById(Long id) {
         return categoryRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Category by id: " + id + " not found"));
     }

@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/record")
@@ -24,21 +23,21 @@ public class RecordController implements RecordControllerDocs {
     @Override
     @GetMapping("")
     public ResponseEntity<List<RecordEntity>> getRecordsByUserIdAndCategoryId(
-            @RequestParam(required = false) UUID userId,
-            @RequestParam(required = false) UUID categoryId
+            @RequestParam(required = false) Long userId,
+            @RequestParam(required = false) Long categoryId
     ) {
         return ResponseEntity.ok(service.getRecordsByUserIdAndCategoryId(userId, categoryId));
     }
 
     @Override
     @GetMapping("/{id}")
-    public ResponseEntity<RecordEntity> getRecordById(@PathVariable UUID id) {
+    public ResponseEntity<RecordEntity> getRecordById(@PathVariable Long id) {
         return ResponseEntity.ok(service.getRecordById(id));
     }
 
     @Override
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteRecordById(@PathVariable UUID id) {
+    public ResponseEntity<String> deleteRecordById(@PathVariable Long id) {
         try {
             service.deleteRecordById(id);
             return ResponseEntity.ok("Record deleted successfully");
