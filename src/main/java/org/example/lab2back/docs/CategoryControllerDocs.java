@@ -6,8 +6,11 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.example.lab2back.dto.CategoryCreateDto;
 import org.example.lab2back.entity.CategoryEntity;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -77,9 +80,9 @@ public interface CategoryControllerDocs {
                     @ApiResponse(responseCode = "400", description = "Invalid category data")
             }
     )
-    ResponseEntity<CategoryEntity> createCategory(
+    ResponseEntity<?> createCategory(
             @Parameter(description = "Category object to be created", required = true)
-            CategoryEntity category
+            @RequestBody CategoryCreateDto category, @RequestParam Long userId
     );
 
     @Operation(

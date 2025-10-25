@@ -1,10 +1,11 @@
 package org.example.lab2back.controller;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import org.example.lab2back.docs.CategoryControllerDocs;
+import org.example.lab2back.dto.CategoryCreateDto;
 import org.example.lab2back.entity.CategoryEntity;
 import org.example.lab2back.service.CategoryService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,8 +13,8 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/category")
-public class CategoryController implements CategoryControllerDocs {
+@RequestMapping("")
+public class CategoryController implements CategoryControllerDocs{
 
     CategoryService categoryService;
 
@@ -21,32 +22,35 @@ public class CategoryController implements CategoryControllerDocs {
         this.categoryService = categoryService;
     }
 
-    @Override
-    @GetMapping("")
+    @GetMapping("/categories")
     public ResponseEntity<List<CategoryEntity>> getCategories() {
         return ResponseEntity.ok(categoryService.getAllCategories());
     }
 
-    @Override
-    @GetMapping("/{id}")
-    public ResponseEntity<CategoryEntity> getCategoryById(@Valid @PathVariable Long id) {
+    @GetMapping("/categories/{id}")
+    public ResponseEntity<CategoryEntity> getCategoryById(@PathVariable Long id) {
         return ResponseEntity.ok(categoryService.getById(id));
     }
 
-    @Override
-    @DeleteMapping("/{id}")
+    @GetMapping("/users/{userId}/categories")
+    public ResponseEntity<List<CategoryEntity>> getCategoriesByUserId(@PathVariable Long userId) {
+        return ResponseEntity.ok(categoryService.getCategoriesByUserId(userId));
+    }
+
+    @DeleteMapping("/categories/{id}")
     public ResponseEntity<String> deleteCategory(@PathVariable Long id) {
         categoryService.deleteCategory(id);
         return ResponseEntity.ok("Category deleted successfully");
     }
 
-    @Override
-    @PostMapping("")
-    @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<CategoryEntity> createCategory(@Valid @RequestBody CategoryEntity category) {
-        CategoryEntity newCategory = categoryService.createCategory(category);
+    @PostMapping("/users/{userId}/categories")
+    public ResponseEntity<?> createCategory(
+            @Valid @RequestBody CategoryCreateDto category,
+            @PathVariable Long userId) {
+        CategoryEntity entity = new CategoryEntity(category.getName());
+        CategoryEntity newCategory = categoryService.createCategory(entity, userId);
         return ResponseEntity
-                 .created(URI.create("/category/" + newCategory.getId()))
-                 .body(newCategory);
+                .created(URI.create("/categories/" + newCategory.getId()))
+                .body(newCategory);
     }
 }

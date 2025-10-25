@@ -1,7 +1,6 @@
 package org.example.lab2back.service;
 
 import jakarta.persistence.EntityNotFoundException;
-import lombok.RequiredArgsConstructor;
 import org.example.lab2back.entity.UserEntity;
 import org.example.lab2back.repository.UserRepository;
 import org.springframework.stereotype.Service;
@@ -32,7 +31,8 @@ public class UserService {
         return newUser;
     }
 
-    public void deleteUser(Long id) {
+    public void deleteUserById(Long id) {
+        if (!userRepository.existsById(id)) throw new EntityNotFoundException("User not found");
         userRepository.deleteById(id);
     }
 }

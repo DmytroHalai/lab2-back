@@ -27,20 +27,20 @@ public class UserController implements UserControllerDocs {
     }
 
     @Override
-    @GetMapping("/user/{id}")
+    @GetMapping("/users/{id}")
     public ResponseEntity<UserEntity> getUserById(@PathVariable Long id) {
         return ResponseEntity.ok(userService.getUserByID(id));
     }
 
     @Override
-    @DeleteMapping("/user/{id}")
+    @DeleteMapping("/users/{id}")
     public ResponseEntity<String> deleteUser(@PathVariable Long id) {
-        userService.deleteUser(id);
+        userService.deleteUserById(id);
         return ResponseEntity.ok("User deleted successfully");
     }
 
     @Override
-    @PostMapping("/user")
+    @PostMapping("/users")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<UserEntity> createUser(@Valid @RequestBody UserEntity user) {
         UserEntity newUser = userService.createUser(user);
