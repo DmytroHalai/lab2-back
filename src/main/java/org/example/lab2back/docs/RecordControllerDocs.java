@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.example.lab2back.dto.RecordCreateDto;
 import org.example.lab2back.entity.RecordEntity;
 import org.springframework.http.ResponseEntity;
 
@@ -99,6 +100,6 @@ public interface RecordControllerDocs {
     )
     ResponseEntity<RecordEntity> createRecord(
             @Parameter(description = "Record object to be created", required = true)
-            RecordEntity oneRecord
+            RecordCreateDto oneRecord, Long userId, Long categoryId
     );
 }
