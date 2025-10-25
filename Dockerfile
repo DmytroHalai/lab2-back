@@ -1,12 +1,13 @@
-FROM eclipse-temurin:21-jdk
-
+# Stage 1: build
+FROM maven:3.9.4-eclipse-temurin-21 AS builder
 WORKDIR /app
-
 COPY pom.xml .
 COPY src ./src
+RUN mvn clean package -DskipTests
 
-RUN apt-get update && apt-get install -y maven && mvn clean package -DskipTests
-
+# Stage 2: runtime
+FROM openjdk:21
+WORKDIR /app
+COPY --from=builder /app/target/*.jar app.jar
 EXPOSE 8080
-
-CMD ["java", "-jar", "target/lab2-back-0.0.1-SNAPSHOT.jar"]
+ENTRYPOINT ["java", "-jar", "app.jar"]
