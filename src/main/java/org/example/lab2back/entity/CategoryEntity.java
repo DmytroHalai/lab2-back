@@ -14,7 +14,7 @@ public class CategoryEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     @NotBlank
     @Size(min = 2, max = 50, message = "Ім'я має містити від 2 до 50 символів")
     private String name;
@@ -22,7 +22,7 @@ public class CategoryEntity {
     @JoinColumn(name = "user_id")
     @JsonBackReference
     private UserEntity user;
-    @OneToMany(mappedBy = "category", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<RecordEntity> records = new ArrayList<>();
 
     public CategoryEntity(String name) {
