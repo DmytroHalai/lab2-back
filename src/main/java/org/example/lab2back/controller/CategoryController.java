@@ -1,8 +1,6 @@
 package org.example.lab2back.controller;
 
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
-import org.example.lab2back.docs.CategoryControllerDocs;
 import org.example.lab2back.dto.CategoryCreateDto;
 import org.example.lab2back.entity.CategoryEntity;
 import org.example.lab2back.service.CategoryService;
@@ -14,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("")
-public class CategoryController implements CategoryControllerDocs{
+public class CategoryController {
 
     CategoryService categoryService;
 
@@ -45,10 +43,9 @@ public class CategoryController implements CategoryControllerDocs{
 
     @PostMapping("/users/{userId}/categories")
     public ResponseEntity<?> createCategory(
-            @Valid @RequestBody CategoryCreateDto category,
-            @PathVariable Long userId) {
-        CategoryEntity entity = new CategoryEntity(category.getName());
-        CategoryEntity newCategory = categoryService.createCategory(entity, userId);
+            @PathVariable Long userId,
+            @Valid @RequestBody CategoryCreateDto category) {
+        CategoryEntity newCategory = categoryService.createCategory(category.getName(), userId);
         return ResponseEntity
                 .created(URI.create("/categories/" + newCategory.getId()))
                 .body(newCategory);
