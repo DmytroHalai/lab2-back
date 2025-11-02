@@ -4,8 +4,6 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 
 @Entity
 public class RecordEntity {
@@ -23,17 +21,29 @@ public class RecordEntity {
     @JsonBackReference("user-record")
     private UserEntity user;
 
+    @ManyToOne
+    @JoinColumn(name = "currency_id")
+    private CurrencyEntity currencyEntity;
     @Column(nullable = false)
     @NotNull
     @Positive
     private double amount;
 
-    public RecordEntity(double amount) {
+    public RecordEntity(double amount, CurrencyEntity currencyEntity) {
         this.amount = amount;
+        this.currencyEntity = currencyEntity;
     }
 
     public RecordEntity() {
 
+    }
+
+    public CurrencyEntity getCurrencyEntity() {
+        return currencyEntity;
+    }
+
+    public void setCurrencyEntity(CurrencyEntity currencyEntity) {
+        this.currencyEntity = currencyEntity;
     }
 
     public Long getId() {

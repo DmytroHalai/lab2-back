@@ -20,28 +20,28 @@ public class UserEntity {
     @Size(min = 2, max = 50, message = "Ім'я має містити від 2 до 50 символів")
     private String username;
 
+    @ManyToOne
+    @JoinColumn(name = "currency_id")
+    private CurrencyEntity currencyEntity;
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<CategoryEntity> categories = new ArrayList<>();
+
+    public UserEntity() {
+    }
 
     public UserEntity(String username) {
         this.username = username;
     }
 
-    public UserEntity() {
-
+    public UserEntity(String username, CurrencyEntity currency) {
+        this.username = username;
+        this.currencyEntity = currency;
     }
 
     public Long getId() {
         return id;
-    }
-
-    public List<CategoryEntity> getCategories() {
-        return categories;
-    }
-
-    public void setCategories(List<CategoryEntity> categories) {
-        this.categories = categories;
     }
 
     public void setId(Long id) {
@@ -54,5 +54,21 @@ public class UserEntity {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public CurrencyEntity getCurrencyEntity() {
+        return currencyEntity;
+    }
+
+    public void setCurrencyEntity(CurrencyEntity currencyEntity) {
+        this.currencyEntity = currencyEntity;
+    }
+
+    public List<CategoryEntity> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(List<CategoryEntity> categories) {
+        this.categories = categories;
     }
 }

@@ -1,21 +1,19 @@
 package org.example.lab2back.controller;
 
 import jakarta.validation.Valid;
-import org.example.lab2back.docs.RecordControllerDocs;
 import org.example.lab2back.dto.RecordCreateDto;
+import org.example.lab2back.entity.CurrencyEntity;
 import org.example.lab2back.entity.RecordEntity;
 import org.example.lab2back.service.RecordService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.net.URI;
 import java.util.List;
 
 @RestController
 @RequestMapping("")
-public class RecordController implements RecordControllerDocs {
+public class RecordController {
     RecordService service;
 
     public RecordController(RecordService service) {
@@ -46,10 +44,18 @@ public class RecordController implements RecordControllerDocs {
             @Valid @RequestBody RecordCreateDto oneRecord,
             @PathVariable Long userId,
             @PathVariable Long categoryId) {
-        RecordEntity entity = new RecordEntity(oneRecord.getAmount());
-        RecordEntity newRecord = service.createRecord(entity, userId, categoryId);
+        RecordEntity newRecord = service.createRecord(oneRecord.getAmount(), oneRecord.getCurrency(), userId, categoryId);
         return ResponseEntity
                 .created(URI.create("/record/" + newRecord.getId()))
                 .body(newRecord);
+    }
+
+    @PatchMapping("/records/{recordId}")
+    public ResponseEntity<RecordEntity> updateCurrencyValue(
+            @PathVariable Long recordId,
+            @RequestParam String currencyName
+    ) {
+        RecordEntity updated = service.updateCurrency(recordId, currencyName);
+        return ResponseEntity.ok(updated);
     }
 }

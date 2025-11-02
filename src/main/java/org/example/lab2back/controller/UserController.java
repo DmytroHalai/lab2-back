@@ -1,10 +1,9 @@
 package org.example.lab2back.controller;
 
 import jakarta.validation.Valid;
-import org.example.lab2back.docs.UserControllerDocs;
+import org.example.lab2back.dto.UserCreateDto;
 import org.example.lab2back.entity.UserEntity;
 import org.example.lab2back.service.UserService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,40 +11,49 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/")
-public class UserController implements UserControllerDocs {
+@RequestMapping("/users")
+public class UserController {
     private final UserService userService;
 
     public UserController(UserService userService) {
         this.userService = userService;
     }
 
-    @Override
-    @GetMapping("/users")
-    public ResponseEntity<List<UserEntity>> getAllUsers() {
-        return ResponseEntity.ok(userService.getAllUsers());
+    @GetMapping
+    public List<UserEntity> getAllUsers() {
+        return userService.getAllUsers();
     }
 
-    @Override
-    @GetMapping("/users/{id}")
-    public ResponseEntity<UserEntity> getUserById(@PathVariable Long id) {
-        return ResponseEntity.ok(userService.getUserByID(id));
+    @GetMapping("/{id}")
+    public UserEntity getUserById(@PathVariable Long id) {
+        return userService.getUserById(id);
     }
 
-    @Override
-    @DeleteMapping("/users/{id}")
-    public ResponseEntity<String> deleteUser(@PathVariable Long id) {
-        userService.deleteUserById(id);
-        return ResponseEntity.ok("User deleted successfully");
-    }
-
-    @Override
-    @PostMapping("/users")
-    @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<UserEntity> createUser(@Valid @RequestBody UserEntity user) {
-        UserEntity newUser = userService.createUser(user);
+    @PostMapping("")
+    public ResponseEntity<UserEntity> createUser(@Valid @RequestBody UserCreateDto dto) {
+        UserEntity newUser = userService.createUser(dto.getUsername(), dto.getCurrency());
         return ResponseEntity
-                .created(URI.create("/users" + newUser.getId()))
+                .created(URI.create("/users/" + newUser.getId()))
                 .body(newUser);
+    }
+
+    @PatchMapping("/{id}/currency")
+    public ResponseEntity<UserEntity> updateUserCurrency(
+            @PathVariable Long id,
+            @RequestParam String currencyName) {
+        UserEntity updated = userService.setCurrency(id, currencyName);
+        return ResponseEntity.ok(updated);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
+        userService.deleteUserById(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/ttt")
+    public ResponseEntity<Void> deleteCurrencies() {
+        userService.deleteAllCurrencies();
+        return ResponseEntity.noContent().build();
     }
 }

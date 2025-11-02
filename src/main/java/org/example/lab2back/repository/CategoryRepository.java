@@ -10,4 +10,5 @@ import java.util.List;
 public interface CategoryRepository extends JpaRepository<CategoryEntity, Long> {
     List<CategoryEntity> findAllByUserId(Long userId);
 
+    boolean existsByUserIdAndName(Long userId, String categoryName);
 }
