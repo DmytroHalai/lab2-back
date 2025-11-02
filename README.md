@@ -1,21 +1,15 @@
 # Lab2-Back
+### Варіант 1, група ІМ-31
 
 **Lab2-Back** — бекенд-сервіс на базі Spring Boot (Maven) для управління користувачами, категоріями та записами (records).  
+
+З цікавого - реалізовано транзактивну залежність між сутностями User -> Category -> Record. Видаляючи юзера - видаляються усі поєднані з ним категорії та рекорди. При створенні рекорду без зазначення валюти - береться валюта юзера по замовчуванню
 
 Реалізовані REST-ендпоінти: створення, отримання, видалення.  
 Документація API — через springdoc‑openapi (Swagger/OpenAPI).
 
----
+Посилання на задеплоєний проєкт - https://cost-accounter-pro.onrender.com/users
 
-Проєкт задеплоєно за допомогою сервісу Render, а також установлено Uptime-Monitor, щоб сервіс не "засинав"
-
-Посилання на задеплоєну документацію проєкту: [посилання](https://cost-accounter.onrender.com/swagger-ui/index.html)
-
-Посилання на колекцію тестування роботи проєкту в Postman: [посилання](https://www.postman.com/gold-eclipse-512795/workspace/cost-accounter/collection/39147312-0a9d68c2-a3da-4b63-a8ff-028e8b35f49e?action=share&source=copy-link&creator=39147312) 
-<-- тут також реалізовано тести, які демонструють правильну роботу застосунку, а також реалізовано скрипти для правильного використання UUID, 
-яке генерується автоматично, більш схематично можна побачити, використовуючи flow
-
-Посилання на флоу в Postman: [посилання](https://www.postman.com/gold-eclipse-512795/workspace/cost-accounter/flow/68f571be6ca9c00014782e58)
 
 ---
 
@@ -38,7 +32,7 @@
 - Spring Web (REST)  
 - Spring Data (якщо використовується)  
 - springdoc-openapi / Swagger UI  
-- UUID як ідентифікатори сутностей
+- Docker
 
 ---
 
@@ -57,8 +51,7 @@
 Побудуйте і запустіть:
 
   ```bash
-  mvn clean install
-  mvn spring-boot:run
+   docker-compose up --build
   ```
 Відкрийте браузер і перейдіть до документації API:
 
@@ -82,40 +75,3 @@ src/
  │          └── application.properties
  └── pom.xml
 ```
-## API Ендпоінти (короткий огляд)
-
-### Користувачі
-GET /users — отримати всіх користувачів
-
-GET /user/{id} — отримати користувача за id
-
-POST /user — створити нового користувача
-
-DELETE /user/{id} — видалити користувача
-
-### Категорії
-GET /category — отримати всі категорії
-
-GET /category/{id} — отримати категорію за id
-
-POST /category — створити нову категорію
-
-DELETE /category/{id} — видалити категорію
-
-### Записи (Records)
-GET /record — отримати записи, опціонально фільтруючи за userId або categoryId
-
-GET /record/{id} — отримати запис за id
-
-POST /record — створити новий запис
-
-DELETE /record/{id} — видалити запис за id
-
-## Документація API
-Після запуску застосунку документація доступна за адресою:
-
-```bash
-http://localhost:8080/swagger-ui/index.html
-```
-
-
