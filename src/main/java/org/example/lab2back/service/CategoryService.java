@@ -6,6 +6,7 @@ import org.example.lab2back.entity.UserEntity;
 import org.example.lab2back.repository.CategoryRepository;
 import org.example.lab2back.repository.UserRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -23,14 +24,16 @@ public class CategoryService {
         return categoryRepository.findAll();
     }
 
-    public CategoryEntity createCategory(CategoryEntity category, Long userId) {
+    public CategoryEntity createCategory(String categoryName, Long userId) {
+        if (categoryRepository.existsByUserIdAndName(userId, categoryName)) {
+            throw new IllegalArgumentException("Category already exists");
+        }
         UserEntity user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
-        CategoryEntity newCategory = new CategoryEntity(category.getName());
+        CategoryEntity newCategory = new CategoryEntity(categoryName);
         newCategory.setUser(user);
         return categoryRepository.save(newCategory);
     }
-
 
     public void deleteCategory(Long id) {
         if(!categoryRepository.existsById(id)) throw new EntityNotFoundException("Category not found");
