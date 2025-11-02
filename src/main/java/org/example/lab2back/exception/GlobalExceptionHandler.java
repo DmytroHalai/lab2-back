@@ -46,7 +46,7 @@ public class GlobalExceptionHandler {
                             "message", errorMessage
                     );
                 })
-                .collect(Collectors.toList());
+                .toList();
         return ResponseEntity.badRequest().body(Map.of(
                 "code", 400,
                 "message", "Validation failed",
