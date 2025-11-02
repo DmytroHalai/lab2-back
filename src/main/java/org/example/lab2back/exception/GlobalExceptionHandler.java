@@ -17,58 +17,58 @@ import java.util.stream.Collectors;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    // 1. Валідація — всі помилки
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, String>> handleValidation(
-            MethodArgumentNotValidException ex) {
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<?> handleIllegalArg(IllegalArgumentException ex) {
+        return ResponseEntity.badRequest().body(Map.of(
+                "code", 400,
+                "message", ex.getMessage()
+        ));
+    }
 
-        Map<String, String> errors = ex.getBindingResult()
-                .getFieldErrors()
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<?> handleNotFound(EntityNotFoundException ex) {
+        return ResponseEntity.status(404).body(Map.of(
+                "code", 404,
+                "message", ex.getMessage()
+        ));
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<?> handleValidationErrors(MethodArgumentNotValidException ex) {
+        List<Map<String, String>> errors = ex.getBindingResult()
+                .getAllErrors()
                 .stream()
-                .collect(Collectors.toMap(
-                        FieldError::getField,
-                        FieldError::getDefaultMessage
-                ));
-        return ResponseEntity.badRequest().body(errors);
+                .map(error -> {
+                    String fieldName = ((FieldError) error).getField();
+                    String errorMessage = error.getDefaultMessage();
+                    return Map.of(
+                            "field", fieldName,
+                            "message", errorMessage
+                    );
+                })
+                .collect(Collectors.toList());
+        return ResponseEntity.badRequest().body(Map.of(
+                "code", 400,
+                "message", "Validation failed",
+                "errors", errors
+        ));
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<?> handleAny(Exception ex) {
+        return ResponseEntity.status(500).body(Map.of(
+                "code", 500,
+                "message", "Internal server error",
+                "details", ex.getMessage()
+        ));
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
-    public ResponseEntity<Map<String, String>> handleDuplicate(
-            DataIntegrityViolationException ex) {
-        return ResponseEntity.status(HttpStatus.CONFLICT)
-                .body(Map.of("name", "Категорія з таким ім'ям вже існує"));
-    }
-
-    // 2. Не знайдено — 404
-    @ExceptionHandler(EntityNotFoundException.class)
-    public ResponseEntity<ApiError> handleEntityNotFound(EntityNotFoundException ex) {
-        ApiError apiError = new ApiError(
-                HttpStatus.NOT_FOUND.value(),
-                ex.getMessage(),
-                null
-        );
-        return new ResponseEntity<>(apiError, HttpStatus.NOT_FOUND);
-    }
-
-    // 3. Бізнес-логіка (наприклад, IllegalArgumentException)
-    @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<ApiError> handleIllegalArgument(IllegalArgumentException ex) {
-        ApiError apiError = new ApiError(
-                HttpStatus.BAD_REQUEST.value(),
-                ex.getMessage(),
-                null
-        );
-        return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
-    }
-
-    // 4. Усі інші непередбачені помилки — 500 (БЕЗ стек-трейсу!)
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiError> handleAllExceptions(Exception ex) {
-        ApiError apiError = new ApiError(
-                HttpStatus.INTERNAL_SERVER_ERROR.value(),
-                "Internal server error",
-                null
-        );
-        return new ResponseEntity<>(apiError, HttpStatus.INTERNAL_SERVER_ERROR);
+    public ResponseEntity<?> handleDataIntegrityViolation(DataIntegrityViolationException ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of(
+                "code", 409,
+                "message", "Data integrity violation",
+                "details", ex.getMessage()
+        ));
     }
 }
