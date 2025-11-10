@@ -10,7 +10,6 @@
 
 Посилання на задеплоєний проєкт - https://cost-accounter-pro.onrender.com/users
 
-
 ---
 
 ## Основні можливості
