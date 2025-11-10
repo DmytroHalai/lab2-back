@@ -20,6 +20,12 @@ public class UserEntity {
     @Size(min = 2, max = 50, message = "Ім'я має містити від 2 до 50 символів")
     private String username;
 
+    @Column(nullable = false)
+    private String password;
+
+    @Column(nullable = false)
+    private String role = "USER";
+
     @ManyToOne
     @JoinColumn(name = "currency_id")
     private CurrencyEntity currencyEntity;
@@ -38,6 +44,22 @@ public class UserEntity {
     public UserEntity(String username, CurrencyEntity currency) {
         this.username = username;
         this.currencyEntity = currency;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 
     public Long getId() {
