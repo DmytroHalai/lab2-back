@@ -31,7 +31,11 @@ public class UserController {
 
     @PostMapping("")
     public ResponseEntity<UserEntity> createUser(@Valid @RequestBody UserCreateDto dto) {
-        UserEntity newUser = userService.createUser(dto.getUsername(), dto.getCurrency());
+        UserEntity newUser = userService.createUser(
+                dto.getUsername(),
+                dto.getPassword(),   // This was missing!
+                dto.getCurrency()
+        );
         return ResponseEntity
                 .created(URI.create("/users/" + newUser.getId()))
                 .body(newUser);
