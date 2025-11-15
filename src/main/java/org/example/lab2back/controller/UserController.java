@@ -29,14 +29,6 @@ public class UserController {
         return userService.getUserById(id);
     }
 
-    @PostMapping("")
-    public ResponseEntity<UserEntity> createUser(@Valid @RequestBody UserCreateDto dto) {
-        UserEntity newUser = userService.createUser(dto.getUsername(), dto.getCurrency());
-        return ResponseEntity
-                .created(URI.create("/users/" + newUser.getId()))
-                .body(newUser);
-    }
-
     @PatchMapping("/{id}/currency")
     public ResponseEntity<UserEntity> updateUserCurrency(
             @PathVariable Long id,
@@ -48,12 +40,6 @@ public class UserController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         userService.deleteUserById(id);
-        return ResponseEntity.noContent().build();
-    }
-
-    @DeleteMapping("/ttt")
-    public ResponseEntity<Void> deleteCurrencies() {
-        userService.deleteAllCurrencies();
         return ResponseEntity.noContent().build();
     }
 }
